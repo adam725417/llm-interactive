@@ -1,0 +1,1 @@
+(async()=>{try{const b=window.__LLM_PAYLOAD,u=Uint8Array.from(atob(b),c=>c.charCodeAt(0)),s=new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip')),h=await new Response(s).text();document.open();document.write(h);document.close()}catch(e){document.body.innerHTML='<p style="padding:40px;font-family:system-ui">載入失敗，請使用最新版 Chrome / Edge 瀏覽器。</p>';console.error(e)}})();
