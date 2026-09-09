@@ -35,7 +35,6 @@ function nav(active='home'){
     <nav class="navlinks">
       <a class="${active==='home'?'active':''}" href="#/">首頁</a>
       <a class="${active==='courses'?'active':''}" href="#/courses">課程</a>
-      <a class="${active==='about'?'active':''}" href="#/about">關於</a>
     </nav>
   </div></header>`
 }
