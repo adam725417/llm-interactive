@@ -23,12 +23,45 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build browser-safe static site
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, gzip, re
+
+          payload = []
+          files = sorted(Path('payload').glob('p[0-9][0-9].js'))
+          if not files:
+              raise SystemExit('No payload chunks found')
+
+          for path in files:
+              text = path.read_text(encoding='utf-8')
+              match = re.search(r"\+'([^']*)';\s*$", text)
+              if not match:
+                  raise SystemExit(f'Cannot parse payload chunk: {path}')
+              payload.append(match.group(1))
+
+          compressed = base64.b64decode(''.join(payload))
+          html = gzip.decompress(compressed)
+
+          out = Path('_site')
+          out.mkdir(exist_ok=True)
+          (out / 'index.html').write_bytes(html)
+          (out / '.nojekyll').touch()
+
+          print(f'Built _site/index.html: {len(html):,} bytes from {len(files)} chunks')
+          PY
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
