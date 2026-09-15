@@ -1,0 +1,17 @@
+.hero-copy h1{
+  font-size:clamp(31px,4.2vw,55px);
+}
+
+.stage-card b,
+.stage-card small{
+  display:block;
+  width:100%;
+}
+
+.stage-card b{
+  margin-bottom:8px;
+}
+
+.stage-card small{
+  font-size:14px;
+}
